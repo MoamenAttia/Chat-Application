@@ -1,7 +1,6 @@
 package com.team10.chat_application.Controller;
 
 
-import com.team10.chat_application.Model.Message;
 import com.team10.chat_application.Model.MessageType;
 import com.team10.chat_application.Model.RoomUser;
 import com.team10.chat_application.View.MainActivity;
@@ -14,6 +13,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -100,6 +100,22 @@ public class Controller {
     }
 
     public void sendMessage(final String text) {
-        socket.emit("sendMessage", text);
+        socket.emit("sendMessage", text, new Ack() {
+            @Override
+            public void call(final Object... args) {
+                MainActivity.mainActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Boolean callback = (Boolean) args[0];
+                        if (callback) {
+                            MainActivity.mainActivity.showToast("Delivered Ya Ma3lm", MessageType.SUCCESS);
+                        } else {
+                            MainActivity.mainActivity.showToast("Not Delivered batal 4tayem", MessageType.ERROR);
+                        }
+                        MainActivity.mainActivity.enableSendButton();
+                    }
+                });
+            }
+        });
     }
 }
