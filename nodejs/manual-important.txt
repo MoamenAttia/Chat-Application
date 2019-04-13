@@ -1,0 +1,6 @@
+---------------------------- How to run the server -----------------------------------------
+1) download nodejs version 11.*.* from this link https://nodejs.org/en/
+2) open the terminal in the nodejs directory.
+3) write this command ( npm install ).
+4) write this command ( node src/app.js ).
+--------------------------------------------------------------------------------------------
