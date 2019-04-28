@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/chatbackground"
+    android:orientation="vertical"
+    android:weightSum="70">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="69"
+        android:scrollbars="vertical" />
+
+
+    <LinearLayout
+        android:id="@+id/llMsgCompose"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <EditText
+            android:id="@+id/inputMsg"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="@color/bg_msg_input"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:textColor="@color/text_msg_input" />
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/bg_btn_join"
+            android:text="Send"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</LinearLayout>

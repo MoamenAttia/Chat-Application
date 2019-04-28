@@ -1,0 +1,103 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/actionbar"
+    android:gravity="center_horizontal">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+
+            <ImageView
+                android:layout_width="283dp"
+                android:layout_height="234dp"
+                android:paddingBottom="80dp"
+                android:src="@drawable/logo" />
+
+            <EditText
+                android:id="@+id/ET_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/person"
+                android:hint="User Name"
+                android:padding="10dp"
+                android:paddingBottom="10dp"
+                android:textColorHint="@color/black"
+                android:textSize="14sp" />
+
+
+            <EditText
+                android:id="@+id/ET_Password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="30dp"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/greenlock"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:textColorHint="@color/black"
+                android:textSize="14sp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/BT_sign_in"
+                    style="@android:style/Widget.DeviceDefault.Light.Button.Borderless.Small"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginBottom="200dp"
+                    android:layout_weight="1"
+                    android:background="@color/bg_btn_join"
+                    android:layout_marginHorizontal="10dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:text="Sign In"
+                    android:textColor="@color/white"
+                    android:textColorHighlight="@color/white" />
+
+
+                <Button
+                    android:id="@+id/account"
+                    style="@android:style/Widget.DeviceDefault.Light.Button.Borderless.Small"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginBottom="200dp"
+                    android:layout_weight="1"
+                    android:background="@color/bg_btn_join"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:text="Sign Up"
+                    android:textColor="@color/white"
+                    android:textColorHighlight="@color/white" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+</RelativeLayout>

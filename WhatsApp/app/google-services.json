@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "361859574480",
+    "firebase_url": "https://chat-application-28a9c.firebaseio.com",
+    "project_id": "chat-application-28a9c",
+    "storage_bucket": "chat-application-28a9c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:361859574480:android:6eccbd688407983d",
+        "android_client_info": {
+          "package_name": "com.moamen.whatsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "361859574480-j9242sm45e178rqgpr6jtgsp5i3tt55i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.moamen.whatsapp",
+            "certificate_hash": "d3d137fbf9641f03c1696e9e984e5de8bfa5f8d6"
+          }
+        },
+        {
+          "client_id": "361859574480-cjd7vpc7ma5j72g3jeiqb5rk6hql70lb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxwo78Nq9C-x5fhsses3DlI2A_F94CWX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "361859574480-cjd7vpc7ma5j72g3jeiqb5rk6hql70lb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
