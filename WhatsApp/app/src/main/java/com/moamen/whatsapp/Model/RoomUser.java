@@ -3,9 +3,9 @@ package com.moamen.whatsapp.Model;
 public class RoomUser {
     private String username;
     private String room;
-    private int id;
+    private String id;
 
-    public RoomUser(String username, String room, int id) {
+    public RoomUser(String username, String room, String id) {
         this.username = username;
         this.room = room;
         this.id = id;
@@ -27,11 +27,11 @@ public class RoomUser {
         this.room = room;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -29,7 +29,7 @@ import es.dmoral.toasty.Toasty;
 public class ChatRoom extends AppCompatActivity {
     public static ChatRoom chatRoomActivity;
     public Controller controller;
-    public Room room;
+    public static Room room;
     public Button btnSend;
     public EditText inputMsg;
 
@@ -37,6 +37,8 @@ public class ChatRoom extends AppCompatActivity {
     private MessageAdapter adapter;
     private RecyclerView recyclerView;
 
+    private String roomName, roomPass, username, ip, port;
+    public static Boolean active = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +47,9 @@ public class ChatRoom extends AppCompatActivity {
 
         // get from previous
         Intent intent = getIntent();
-        final String roomName = intent.getStringExtra("room_name");
-        final String roomPass = intent.getStringExtra("room_pass");
-        final String username = intent.getStringExtra("username");
-
+        roomName = intent.getStringExtra("room_name");
+        roomPass = intent.getStringExtra("room_pass");
+        username = intent.getStringExtra("username");
 
         // Activity, Controller
         controller = Controller.getInstance();
@@ -67,10 +68,8 @@ public class ChatRoom extends AppCompatActivity {
         room = new Room(roomName, roomPass, new ArrayList<Message>());
         controller.loadRoom(roomName, roomPass, room.getChatList());
 
-        String ip = "10.42.0.1";
-        String port = "3000";
-
-        controller.chat(username, roomName, ip, port);
+        ip = "192.168.43.235";
+        port = "3000";
 
         // setting up recycler view
         recyclerView = findViewById(R.id.recycler_view);
@@ -80,6 +79,7 @@ public class ChatRoom extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         prepareData();
+        controller.chat(username, roomName, ip, port);
 
 
         // Click Listeners
@@ -90,7 +90,26 @@ public class ChatRoom extends AppCompatActivity {
                 controller.sendMessage(roomName, roomPass, room.getChatList(), username, inputMsg.getText().toString());
             }
         });
+    }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        controller.disconnect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        active = false;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        active = true;
+        prepareData();
     }
 
     @Override
@@ -106,6 +125,9 @@ public class ChatRoom extends AppCompatActivity {
         if (item.getItemId() == R.id.menu_active_people) {
             Intent i = new Intent(this, ActivePeople.class);
             i.putExtra("room_name", getIntent().getStringExtra("room_name"));
+            i.putExtra("username", username);
+            i.putExtra("ip", ip);
+            i.putExtra("port", port);
             startActivity(i);
             showToast("Active People", MessageType.INFO);
             return true;

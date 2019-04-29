@@ -1,5 +1,6 @@
 package com.moamen.whatsapp.Controller;
 
+import android.service.autofill.CharSequenceTransformation;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -140,7 +142,6 @@ public class Controller {
                             Room room = document.toObject(Room.class);
                             if (room != null) {
                                 if (room.getPassword().equals(password)) {
-                                    EnterChatRoom.enterChatRoomActivity.showToast("Welcome to the room", MessageType.SUCCESS);
                                     EnterChatRoom.enterChatRoomActivity.loadRoom();
                                 } else {
                                     EnterChatRoom.enterChatRoomActivity.showToast("chat room or password is wrong", MessageType.ERROR);
@@ -168,8 +169,8 @@ public class Controller {
                             Room room = document.toObject(Room.class);
                             if (room != null) {
                                 if (room.getPassword().equals(password)) {
-                                    messagesArrayList.clear();
                                     ArrayList<Message> dbList = room.getChatList();
+                                    messagesArrayList.clear();
                                     messagesArrayList.addAll(dbList);
                                     ChatRoom.chatRoomActivity.prepareData();
                                 } else {
@@ -216,17 +217,16 @@ public class Controller {
                     .set(chatRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    ChatRoom.chatRoomActivity.showToast("Your Message Added Successfully ^_^", MessageType.SUCCESS);
                     ChatRoom.chatRoomActivity.prepareData();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    ChatRoom.chatRoomActivity.showToast("Your Message Cannot be Added :D", MessageType.ERROR);
+                    ChatRoom.chatRoomActivity.showToast("Your Message Cannot be Added Check Internet Connection :D", MessageType.ERROR);
                 }
             });
         } catch (Error error) {
-            ChatRoom.chatRoomActivity.showToast("Your Message Cannot be Added :D", MessageType.ERROR);
+            ChatRoom.chatRoomActivity.showToast("Your Message Cannot be Added Check Internet Connection :D", MessageType.ERROR);
         }
     }
 
@@ -254,7 +254,15 @@ public class Controller {
                         final String text = message.getString("text");
                         ChatRoom.chatRoomActivity.runOnUiThread(new Runnable() {
                             public void run() {
-                                ChatRoom.chatRoomActivity.showToast("Username:" + username + " ,text: " + text, MessageType.INFO);
+                                if (ChatRoom.active) {
+                                    if (!username.equals("Admin")) {
+                                        ChatRoom.room.getChatList().add(new Message(username, text));
+                                        if (ChatRoom.active) {
+                                            ChatRoom.chatRoomActivity.prepareData();
+                                        }
+                                    }
+                                }
+                                ChatRoom.chatRoomActivity.showToast("Username:" + username + "text: " + text, MessageType.INFO);
                             }
                         });
                     } catch (JSONException e) {
@@ -275,12 +283,14 @@ public class Controller {
                             RoomUser roomUser = new RoomUser(
                                     jsonUserRoom.getString("username"),
                                     jsonUserRoom.getString("room"),
-                                    jsonUserRoom.getInt("id")
+                                    jsonUserRoom.getString("id")
                             );
                             current_room_data.add(roomUser);
                         }
                         roomData.put(room, current_room_data);
-                        loadActivePeople(ActivePeople.activePeopleActivity.roomName, ActivePeople.activePeopleActivity.arrayList);
+                        if (ActivePeople.active) {
+                            loadActivePeople(ActivePeople.activePeopleActivity.roomName, ActivePeople.activePeopleActivity.arrayList);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -307,7 +317,6 @@ public class Controller {
                         if (callback) {
                             arrayList.add(new Message(from, text));
                             Controller.getInstance().addChatMessage(chatRoomID, password, arrayList);
-                            ChatRoom.chatRoomActivity.showToast("SUCCESS", MessageType.INFO);
                         } else {
                             ChatRoom.chatRoomActivity.showToast("Not Delivered batal 4tayem", MessageType.ERROR);
                         }
@@ -328,5 +337,9 @@ public class Controller {
             }
         }
         ActivePeople.activePeopleActivity.update();
+    }
+
+    public void disconnect() {
+        socket.disconnect();
     }
 }

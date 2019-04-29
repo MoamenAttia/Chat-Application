@@ -19,7 +19,8 @@ public class ActivePeople extends AppCompatActivity {
     public ArrayList<String> arrayList;
     public static ActivePeople activePeopleActivity;
     ListView topicsListView;
-    public String roomName;
+    public String roomName, username, ip, port;
+    public static Boolean active = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +41,25 @@ public class ActivePeople extends AppCompatActivity {
         // Preparation
         arrayList = new ArrayList<>();
         roomName = getIntent().getStringExtra("room_name");
+        username = getIntent().getStringExtra("username");
+        ip = getIntent().getStringExtra("ip");
+        port = getIntent().getStringExtra("port");
         controller.loadActivePeople(roomName, arrayList);
     }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        active = false;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        active = true;
+    }
+
 
     public void update() {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.active_people_item, R.id.username_id, arrayList);
