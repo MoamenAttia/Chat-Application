@@ -37,7 +37,7 @@ public class ChatRoom extends AppCompatActivity {
     private MessageAdapter adapter;
     private RecyclerView recyclerView;
 
-    private String roomName, roomPass, username, ip, port;
+    public static String roomName, roomPass, username, ip, port;
     public static Boolean active = false;
 
     @Override
