@@ -275,7 +275,18 @@ public class Controller {
             JSONObject person = new JSONObject();
             person.put("username", username);
             person.put("room", room);
-            socket.emit("join", person);
+            final Boolean[] Success = {true};
+            socket.emit("join", person, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    if (args.length > 0) {
+                        Success[0] = false;
+                    }
+                }
+            });
+            if (!Success[0]) {
+                return false;
+            }
             socket.on("message", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {

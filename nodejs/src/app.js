@@ -16,10 +16,12 @@ const io = socketio(server);
 
 io.on('connection', (socket) => {
     log('new websocket connection!');
-    socket.on('join', (options) => {
+    socket.on('join', (options, callback) => {
         const { error, user } = addUser({ id: socket.id, username: options.username, room: options.room });
+
         if (error) {
-            return console.log(error);
+            console.log(error);
+            return callback(error);
         }
         socket.join(user.room);
         socket.emit('message', generateMessage('Admin', `Welcome to chat room ${user.room}`));
@@ -28,6 +30,7 @@ io.on('connection', (socket) => {
             room: user.room,
             users: getUsersInRoom(user.room)
         });
+        callback();
     });
 
     socket.on('sendMessage', (message, callback) => {
