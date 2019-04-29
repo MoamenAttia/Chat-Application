@@ -88,6 +88,7 @@ public class ChatRoom extends AppCompatActivity {
             public void onClick(View v) {
                 btnSend.setEnabled(false);
                 controller.sendMessage(roomName, roomPass, room.getChatList(), username, inputMsg.getText().toString());
+                inputMsg.setText("");
             }
         });
     }
