@@ -60,24 +60,42 @@ public class Controller {
         return single_instance;
     }
 
-    public void addUser(String name, String email, String password) {
-        try {
-            User user = new User(name, email, password);
-            db.collection("user").document(user.getName())
-                    .set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    SignUp.signUpActivity.showToast("sign up successfully ^_^", MessageType.SUCCESS);
+    public void addUser(final String name, final String email, final String password) {
+        db.collection("user").document(name).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        if (document.exists()) {
+                            SignUp.signUpActivity.showToast("username exists", MessageType.ERROR);
+                        } else {
+                            User user = null;
+                            try {
+                                user = new User(name, email, password);
+                                db.collection("user").document(user.getName())
+                                        .set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        SignUp.signUpActivity.showToast("sign up successfully ^_^", MessageType.SUCCESS);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        SignUp.signUpActivity.showToast("sign up failed :D", MessageType.ERROR);
+                                    }
+                                });
+                            } catch (Error error) {
+                                SignUp.signUpActivity.showToast(error.getMessage(), MessageType.ERROR);
+                            }
+
+                        }
+                    }
+                } else {
+                    SignUp.signUpActivity.showToast("Error due to network", MessageType.ERROR);
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    SignUp.signUpActivity.showToast("sign up failed :D", MessageType.ERROR);
-                }
-            });
-        } catch (Error error) {
-            SignUp.signUpActivity.showToast(error.getMessage(), MessageType.ERROR);
-        }
+            }
+        });
     }
 
     public void signIn(String username, final String password) {
@@ -110,25 +128,38 @@ public class Controller {
         });
     }
 
-    public void addRoom(String chatRoomID, String password) {
-        try {
-            Room chatRoom = new Room(chatRoomID, password, new ArrayList<Message>());
+    public void addRoom(final String chatRoomID, final String password) {
 
-            db.collection("room").document(chatRoomID)
-                    .set(chatRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    CreateRoom.createRoomActivity.showToast("Chat Room Created Successfully ^_^", MessageType.SUCCESS);
+
+        db.collection("room").document(chatRoomID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        if (document.exists()) {
+                            CreateRoom.createRoomActivity.showToast("Chat Room Exists", MessageType.ERROR);
+                        } else {
+                            Room chatRoom = new Room(chatRoomID, password, new ArrayList<Message>());
+                            db.collection("room").document(chatRoomID)
+                                    .set(chatRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    CreateRoom.createRoomActivity.showToast("Chat Room Created Successfully ^_^", MessageType.SUCCESS);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    CreateRoom.createRoomActivity.showToast("Chat Room Cannot be Created :D", MessageType.ERROR);
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    CreateRoom.createRoomActivity.showToast("Error due to network", MessageType.ERROR);
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    CreateRoom.createRoomActivity.showToast("Chat Room Cannot be Created :D", MessageType.ERROR);
-                }
-            });
-        } catch (Error error) {
-            CreateRoom.createRoomActivity.showToast(error.getMessage(), MessageType.ERROR);
-        }
+            }
+        });
     }
 
     public void joinRoom(String chatRoomID, final String password) {
@@ -336,7 +367,7 @@ public class Controller {
 
     public void loadActivePeople(String chatRoomID, final ArrayList<String> arrayList) {
         for (Map.Entry<String, ArrayList<RoomUser>> entry : roomData.entrySet()) {
-            if (entry.getKey().equals(chatRoomID)) {
+            if (entry.getKey().equals(chatRoomID.toLowerCase())) {
                 arrayList.clear();
                 for (int i = 0; i < entry.getValue().size(); ++i) {
                     arrayList.add(entry.getValue().get(i).getUsername());
