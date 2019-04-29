@@ -68,7 +68,7 @@ public class ChatRoom extends AppCompatActivity {
         room = new Room(roomName, roomPass, new ArrayList<Message>());
         controller.loadRoom(roomName, roomPass, room.getChatList());
 
-        ip = "192.168.43.235";
+        ip = "192.168.137.1";
         port = "3000";
 
         // setting up recycler view

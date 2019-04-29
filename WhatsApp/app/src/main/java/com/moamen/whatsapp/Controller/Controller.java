@@ -288,8 +288,15 @@ public class Controller {
                             current_room_data.add(roomUser);
                         }
                         roomData.put(room, current_room_data);
+
+
                         if (ActivePeople.active) {
-                            loadActivePeople(ActivePeople.activePeopleActivity.roomName, ActivePeople.activePeopleActivity.arrayList);
+                            ActivePeople.activePeopleActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loadActivePeople(ActivePeople.activePeopleActivity.roomName, ActivePeople.activePeopleActivity.arrayList);
+                                }
+                            });
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
