@@ -18,10 +18,9 @@ io.on('connection', (socket) => {
     log('new websocket connection!');
     socket.on('join', (options, callback) => {
         const { error, user } = addUser({ id: socket.id, username: options.username, room: options.room });
-
         if (error) {
             console.log(error);
-            return callback(error);
+            return callback(false);
         }
         socket.join(user.room);
         socket.emit('message', generateMessage('Admin', `Welcome to chat room ${user.room}`));
@@ -30,7 +29,7 @@ io.on('connection', (socket) => {
             room: user.room,
             users: getUsersInRoom(user.room)
         });
-        callback();
+        callback(true);
     });
 
     socket.on('sendMessage', (message, callback) => {
@@ -45,14 +44,16 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        const user = removeUser(socket.id);
-        if (user) {
-            log(`${user.username} has left the room ${user.room}`);
-            io.to(user.room).emit('message', generateMessage('Admin', `${user.username} has left!`));
-            io.to(user.room).emit('roomData', {
-                room: user.room,
-                users: getUsersInRoom(user.room)
-            });
+        const {user, error} = removeUser(socket.id);
+        if(!error){
+            if (user) {
+                log(`${user.username} has left the room ${user.room}`);
+                io.to(user.room).emit('message', generateMessage('Admin', `${user.username} has left!`));
+                io.to(user.room).emit('roomData', {
+                    room: user.room,
+                    users: getUsersInRoom(user.room)
+                });
+            }
         }
     });
 

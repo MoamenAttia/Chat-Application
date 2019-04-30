@@ -43,7 +43,7 @@ const getUser = (id) => {
 const removeUser = (id) => {
     const idx = users.findIndex((user) => user.id === id);
     if (idx != -1) {
-        return users.splice(idx, 1)[0];
+        return {user: users.splice(idx, 1)[0]};
     }
     return { error: 'no user has this id' };
 };
