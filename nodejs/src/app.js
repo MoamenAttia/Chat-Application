@@ -32,14 +32,14 @@ io.on('connection', (socket) => {
         callback(true);
     });
 
-    socket.on('sendMessage', (message, callback) => {
+    socket.on('sendMessage', (message, createdAt, callback) => {
         const user = getUser(socket.id);
         const filter = new Filter();
         if (filter.isProfane(message)) {
             return callback(false);
         }
         log(`A new Message From ${user.username} in the room ${user.room}, the message: ${message}`)
-        socket.broadcast.to(user.room).emit('message', generateMessage(user.username, message));
+        socket.broadcast.to(user.room).emit('message', generateMessage(user.username, message, createdAt));
         callback(true);
     });
 
