@@ -35,10 +35,12 @@ public class ChatRoom extends AppCompatActivity {
 
     private ArrayList<Message> messages;
     private MessageAdapter adapter;
-    private RecyclerView recyclerView;
+    public RecyclerView recyclerView;
 
     public static String roomName, roomPass, username, ip, port;
     public static Boolean active = false;
+
+    public static Boolean disabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +88,13 @@ public class ChatRoom extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnSend.setEnabled(false);
-                controller.sendMessage(roomName, roomPass, room.getChatList(), username, inputMsg.getText().toString());
-                inputMsg.setText("");
+                if (!disabled) {
+                    btnSend.setEnabled(false);
+                    controller.sendMessage(roomName, roomPass, room.getChatList(), username, inputMsg.getText().toString());
+                    inputMsg.setText("");
+                } else {
+                    showToast("This user cannot react here", MessageType.WARNINGS);
+                }
             }
         });
     }
@@ -124,13 +130,17 @@ public class ChatRoom extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_active_people) {
-            Intent i = new Intent(this, ActivePeople.class);
-            i.putExtra("room_name", getIntent().getStringExtra("room_name"));
-            i.putExtra("username", username);
-            i.putExtra("ip", ip);
-            i.putExtra("port", port);
-            startActivity(i);
-            showToast("Active People", MessageType.INFO);
+            if (!disabled) {
+                Intent i = new Intent(this, ActivePeople.class);
+                i.putExtra("room_name", getIntent().getStringExtra("room_name"));
+                i.putExtra("username", username);
+                i.putExtra("ip", ip);
+                i.putExtra("port", port);
+                startActivity(i);
+                showToast("Active People", MessageType.INFO);
+            } else {
+                showToast("This user cannot react here", MessageType.WARNINGS);
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

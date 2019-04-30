@@ -2,6 +2,8 @@ package com.moamen.whatsapp.Controller;
 
 import android.service.autofill.CharSequenceTransformation;
 import android.support.annotation.NonNull;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -279,7 +281,19 @@ public class Controller {
             socket.emit("join", person, new Ack() {
                 @Override
                 public void call(Object... args) {
-                    if (args.length > 0) {
+                    Boolean callback = (Boolean) args[0];
+                    if (callback) {
+                        Success[0] = true;
+                        ChatRoom.disabled = false;
+                    } else {
+                        ChatRoom.disabled = true;
+                        ChatRoom.chatRoomActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ChatRoom.chatRoomActivity.showToast("username exists. you are useless here!", MessageType.ERROR);
+                                ChatRoom.chatRoomActivity.recyclerView.setVisibility(View.INVISIBLE);
+                            }
+                        });
                         Success[0] = false;
                     }
                 }
