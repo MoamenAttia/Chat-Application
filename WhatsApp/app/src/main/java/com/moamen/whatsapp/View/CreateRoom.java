@@ -42,7 +42,11 @@ public class CreateRoom extends AppCompatActivity {
         createBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                controller.addRoom(roomName.getText().toString(), roomPassword.getText().toString());
+                if (roomName.getText().toString().equals("") || roomPassword.getText().toString().equals("")) {
+                    showToast("please enter room name and password", MessageType.WARNINGS);
+                } else {
+                    controller.addRoom(roomName.getText().toString(), roomPassword.getText().toString());
+                }
             }
         });
     }

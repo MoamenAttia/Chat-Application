@@ -60,7 +60,11 @@ public class SignIn extends AppCompatActivity {
     }
 
     private void signIn() {
-        controller.signIn(username.getText().toString(), pass.getText().toString());
+        if (username.getText().toString().equals("") || pass.getText().toString().equals("")) {
+            showToast("please enter username and password", MessageType.WARNINGS);
+        } else {
+            controller.signIn(username.getText().toString(), pass.getText().toString());
+        }
     }
 
 

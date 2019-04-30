@@ -32,7 +32,9 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.net.URISyntaxException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -115,12 +117,12 @@ public class Controller {
                                     SignIn.signInActivity.showToast("Sign In Successfully", MessageType.SUCCESS);
                                     SignIn.signInActivity.goToHomeActivity();
                                 } else {
-                                    SignIn.signInActivity.showToast("email or password is wrong", MessageType.ERROR);
+                                    SignIn.signInActivity.showToast("username or password is wrong", MessageType.ERROR);
                                 }
                             }
 
                         } else {
-                            SignIn.signInActivity.showToast("email or password is wrong", MessageType.ERROR);
+                            SignIn.signInActivity.showToast("username or password is wrong", MessageType.ERROR);
                         }
                     }
                 } else {
@@ -308,17 +310,20 @@ public class Controller {
                     try {
                         final String username = message.getString("username");
                         final String text = message.getString("text");
+                        final long createdAt = message.getLong("createdAt");
                         ChatRoom.chatRoomActivity.runOnUiThread(new Runnable() {
                             public void run() {
                                 if (ChatRoom.active) {
                                     if (!username.equals("Admin")) {
-                                        ChatRoom.room.getChatList().add(new Message(username, text));
+                                        ChatRoom.room.getChatList().add(new Message(username, text, createdAt));
                                         if (ChatRoom.active) {
                                             ChatRoom.chatRoomActivity.prepareData();
                                         }
                                     }
                                 }
-                                ChatRoom.chatRoomActivity.showToast("Username:" + username + "text: " + text, MessageType.INFO);
+                                if (username.equals("Admin")) {
+                                    ChatRoom.chatRoomActivity.showToast("Username:" + username + " text: " + text, MessageType.INFO);
+                                }
                             }
                         });
                     } catch (JSONException e) {
@@ -370,7 +375,8 @@ public class Controller {
     }
 
     public void sendMessage(final String chatRoomID, final String password, final ArrayList<Message> arrayList, final String from, final String text) {
-        socket.emit("sendMessage", text, new Ack() {
+        final long currentTime = new Date().getTime();
+        socket.emit("sendMessage", text, currentTime, new Ack() {
             @Override
             public void call(final Object... args) {
                 ChatRoom.chatRoomActivity.runOnUiThread(new Runnable() {
@@ -378,10 +384,10 @@ public class Controller {
                     public void run() {
                         Boolean callback = (Boolean) args[0];
                         if (callback) {
-                            arrayList.add(new Message(from, text));
+                            arrayList.add(new Message(from, text, currentTime));
                             Controller.getInstance().addChatMessage(chatRoomID, password, arrayList);
                         } else {
-                            ChatRoom.chatRoomActivity.showToast("Not Delivered batal 4tayem", MessageType.ERROR);
+                            ChatRoom.chatRoomActivity.showToast("Not Delivered, batal 4tayem", MessageType.WARNINGS);
                         }
                         ChatRoom.chatRoomActivity.btnSend.setEnabled(true);
                     }

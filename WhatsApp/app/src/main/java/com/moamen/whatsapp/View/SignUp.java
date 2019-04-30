@@ -50,7 +50,11 @@ public class SignUp extends AppCompatActivity {
 
 
     private void signUp() {
-        controller.addUser(user.getText().toString(), email.getText().toString(), password.getText().toString());
+        if (user.getText().toString().equals("") || email.getText().toString().equals("") || password.getText().toString().equals("")) {
+            showToast("please enter username, email and password", MessageType.WARNINGS);
+        } else {
+            controller.addUser(user.getText().toString(), email.getText().toString(), password.getText().toString());
+        }
     }
 
 

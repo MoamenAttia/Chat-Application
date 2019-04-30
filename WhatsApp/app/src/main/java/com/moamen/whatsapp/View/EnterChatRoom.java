@@ -46,7 +46,6 @@ public class EnterChatRoom extends AppCompatActivity {
         }
 
 
-
         // Click Listeners
         enterRoomBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +64,11 @@ public class EnterChatRoom extends AppCompatActivity {
     }
 
     public void joinRoom() {
-        controller.joinRoom(roomText.getText().toString(), passwordEditText.getText().toString());
+        if (passwordEditText.getText().toString().equals("")) {
+            showToast("please enter password", MessageType.WARNINGS);
+        } else {
+            controller.joinRoom(roomText.getText().toString(), passwordEditText.getText().toString());
+        }
     }
 
     public void showToast(String message, MessageType messageType) {

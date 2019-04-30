@@ -6,6 +6,9 @@ import android.widget.TextView;
 
 import com.moamen.whatsapp.R;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 
 public class ReceivedMessageHolder extends RecyclerView.ViewHolder {
     public TextView from, txt, createdAt;
@@ -18,7 +21,9 @@ public class ReceivedMessageHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Message message) {
-        createdAt.setText(String.valueOf(message.getCreatedAt()));
+        Timestamp ts = new Timestamp(message.getCreatedAt());
+        Date date = ts;
+        createdAt.setText(date.toString());
         txt.setText(message.getText());
         from.setText(message.getFrom());
     }

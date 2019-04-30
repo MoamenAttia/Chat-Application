@@ -27,7 +27,6 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="4dp"
         android:text="11:40"
-        android:visibility="invisible"
         android:textColor="#FFF"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="@+id/text_message_body"

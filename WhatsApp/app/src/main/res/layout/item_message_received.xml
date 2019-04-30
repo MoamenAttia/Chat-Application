@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/image_message_profile"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginLeft="8dp"
         android:visibility="invisible"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -51,7 +51,6 @@
         android:text="11:40"
         android:textColor="#FFF"
         android:textSize="10sp"
-        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/text_message_body"
         app:layout_constraintLeft_toRightOf="@+id/text_message_body" />
 
